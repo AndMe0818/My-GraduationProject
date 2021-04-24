@@ -39,7 +39,10 @@ import {
     Upload,
     Timeline,
     TimelineItem,
-    Calendar
+    Calendar,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
 } from 'element-ui'
 
 Vue.use(Form)
@@ -80,5 +83,8 @@ Vue.use(Upload);
 Vue.use(Timeline);
 Vue.use(TimelineItem);
 Vue.use(Calendar);
+Vue.use(Dropdown);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
