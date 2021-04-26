@@ -93,6 +93,7 @@ export default {
 <style  lang="less"  scoped>
 .el-container {
   height: 100%;
+  overflow: auto;
 }
 .el-header {
   width: 100%;

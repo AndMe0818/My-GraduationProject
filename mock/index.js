@@ -39,3 +39,17 @@ Mock.mock('api/get/ground', 'get', () => {
     }
   }
 })
+Mock.mock('course', 'get', () => {
+  return {
+    data: [
+      {type:'java',name:'java课'},
+      {type:'js',name:'js课'},
+      {type:'test',name:'test课'},
+      {type:'yunwei',name:'运维'},
+    ],
+    meta: {
+      msg: '获取成功',
+      status: 200
+    }
+  }
+})
