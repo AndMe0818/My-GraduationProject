@@ -1,11 +1,12 @@
 import originAxios from 'axios'
 // import qs from 'qs'
+import Vue from 'vue'
 
 export default function axios(option) {
   return new Promise((resolve, reject) => {
     // 1.创建axios的实例
     const instance = originAxios.create({
-      // baseURL: 'http://127.0.0.1:8888/api/private/v1/',
+      baseURL: 'http://127.0.0.1:8088/api/',
       timeout: 5000
     })
 
@@ -33,7 +34,35 @@ export default function axios(option) {
 
     instance.interceptors.response.use(
       response => {
-        // console.log('来到了response拦截success中');
+        console.log('来到了response拦截success中')
+        // 操作反馈
+        let message = response.data.meta.msg
+        switch (response.data.meta.status) {
+          case 200:
+            Vue.prototype.$message.success(message)
+            break
+          case 201:
+            Vue.prototype.$message.success(message)
+            break
+          case 204:
+            Vue.prototype.$message.success(message)
+            break
+          case 400:
+            Vue.prototype.$message.success(message)
+            break
+          case 401:
+            Vue.prototype.$message.error(message)
+            break
+          case 403:
+            Vue.prototype.$message.error(message)
+            break
+          case 404:
+            Vue.prototype.$message.error(message)
+            break
+          case 500:
+            Vue.prototype.$message.error(message)
+            break
+        }
         return response.data
       },
       err => {

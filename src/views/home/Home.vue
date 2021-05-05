@@ -35,7 +35,9 @@
           background-color="#3a3d46"
           text-color="#fff"
           active-text-color="#ffd04b"
+          :collapse-transition="false"
         >
+      
           <el-menu-item index="notice">
             <i class="el-icon-menu"></i>
             <span slot="title">管内公告</span>
@@ -72,17 +74,24 @@ export default {
   data() {
     return {
       isToggle: false,
+      menuList: [
+        { index: 'notice', title: '管内公告' },
+        { index: 'ground', title: '场地信息' },
+        { index: 'shop', title: '场内商品' },
+        { index: 'users', title: '用户管理' },
+        { index: 'date', title: '工作日志' },
+      ],
     }
   },
   created() {
-    this.getUserList()
+    // this.getUserList()
   },
   methods: {
-    getUserList() {
-      this.$http({ url: 'api/get/users' }).then((res) => {
-        console.log(res)
-      })
-    },
+    // getUserList() {
+    //   this.$http({ url: 'api/get/users' }).then((res) => {
+    //     console.log(res)
+    //   })
+    // },
 
     toogleCollapse() {
       this.isToggle = !this.isToggle
