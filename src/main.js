@@ -7,10 +7,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/fonts/iconfont.css'
 import './assets/css/global.css'
 import './assets/font2/iconfont.css'
-import axios from './network/axios'
+// import axios from 'axios'
+import vueaxios from './network/axios'
 import '../mock/index'
 
-Vue.prototype.$http = axios
+Vue.prototype.$http = vueaxios
+// axios.defaults.withCredentials = true
+import { message } from './utils/resetMessage'
+Vue.prototype.$message = message; 
 
 Vue.config.productionTip = false
 

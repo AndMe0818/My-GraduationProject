@@ -1,12 +1,15 @@
 import originAxios from 'axios'
+
 // import qs from 'qs'
+
 import Vue from 'vue'
+import Router from '../router/index'
 
 export default function axios(option) {
   return new Promise((resolve, reject) => {
     // 1.创建axios的实例
     const instance = originAxios.create({
-      baseURL: 'http://127.0.0.1:8088/api/',
+      // baseURL: '',
       timeout: 5000
     })
 
@@ -48,13 +51,14 @@ export default function axios(option) {
             Vue.prototype.$message.success(message)
             break
           case 400:
-            Vue.prototype.$message.success(message)
+            Vue.prototype.$message.error(message)
             break
           case 401:
             Vue.prototype.$message.error(message)
             break
           case 403:
             Vue.prototype.$message.error(message)
+            Router.push('/login')
             break
           case 404:
             Vue.prototype.$message.error(message)

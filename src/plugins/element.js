@@ -86,5 +86,5 @@ Vue.use(Calendar);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
-Vue.prototype.$message = Message
+// Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

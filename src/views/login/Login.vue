@@ -12,10 +12,10 @@
           :rules="loginFormRules"
           ref="loginFormRef"
         >
-          <el-form-item prop="username">
+          <el-form-item prop="email">
             <el-input
               prefix-icon="el-icon-user"
-              v-model="loginForm.username"
+              v-model="loginForm.email"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -39,22 +39,39 @@
 export default {
   components: {},
   data() {
+    var checkEmail = (rule, value, cb) => {
+      let regEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
+      if (regEmail.test(value)) {
+        // 合法的用户名
+        return cb()
+      }
+      cb(new Error('请输入符合规则的邮箱'))
+    }
+    var checkPwd = (rule, value, cb) => {
+      let regPwd = /^\w+$/g
+      if (regPwd.test(value)) {
+        if (value.length < 6 || value.length > 12) {
+          cb(new Error('请输入符合规则的密码长度，6-12位数字、字母或字符！'))
+        }
+        return cb()
+      }
+      cb(new Error('请输入符合规则的密码，6-12位数字、字母或字符！'))
+    }
     return {
+      // 登录表单
       loginForm: {
-        username: 'admin',
+        email: '1102928566@qq.com',
         password: '123456',
       },
       loginFormRules: {
-        username: [
-          { required: true, message: '请用户名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' },
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur' },
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           {
-            min: 6,
-            max: 15,
-            message: '长度在 6 到 15 个字符',
+            validator: checkPwd,
             trigger: 'blur',
           },
         ],
@@ -64,7 +81,26 @@ export default {
   created() {},
   methods: {
     login() {
-      this.$router.push('/home')
+      this.$refs.loginFormRef.validate((vaild) => {
+        if (!vaild) return
+        this.$http({
+          url: '/api/login/admin',
+          method: 'post',
+          data: this.loginForm,
+        }).then((res) => {
+          console.log(res)
+          if (res.meta.status !== 200) {
+            return this.$message.warning('登录失败请检查后登录')
+          }
+          // 1.登录成功后 服务器返回了一个token  保存在客户端的sessionstoryage中
+          // 1.1 项目中除了登录意外的其他api接口 都必须在登录之后才能访问
+          // 1.2 token 只又在当前网站打开期间才生效，所以才储存在 sessionstorage中
+          // 2.通过路由拦截完成
+          window.sessionStorage.setItem('user', res.data.user)
+          // window.sessionStorage.setItem('Id', res.data.id)
+          this.$router.push('/home')
+        })
+      })
     },
     resetForm() {
       this.$refs.loginFormRef.resetFields()
@@ -76,7 +112,11 @@ export default {
 .login {
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(to bottom right, rgb(196, 197, 200), rgb(77, 172, 231));
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(196, 197, 200),
+    rgb(77, 172, 231)
+  );
 }
 .login-box {
   position: absolute;

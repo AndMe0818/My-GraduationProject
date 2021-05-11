@@ -65,7 +65,7 @@
               placement="top"
             >
               <el-button
-                @click="showEditDialog(slotscope.row.id)"
+                @click="showEditDialog(slotscope.row._id)"
                 type="primary"
                 icon="el-icon-edit"
                 size="mini"
@@ -80,7 +80,7 @@
               placement="top"
             >
               <el-button
-                @click="removeUserByID(slotscope.row.id)"
+                @click="removeUserByID(slotscope.row._id)"
                 type="danger"
                 icon="el-icon-delete"
                 size="mini"
@@ -126,8 +126,27 @@
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="addForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="用户权限" prop="mobile">
-          <el-input v-model="addForm.role"></el-input>
+        <el-form-item label="用户状态">
+          <el-select v-model="addForm.state" placeholder="请选择">
+            <el-option
+              v-for="item in stateList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户权限">
+          <el-select v-model="addForm.role" placeholder="请选择">
+            <el-option
+              v-for="item in roleList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <!-- 底部按钮区 -->
@@ -160,7 +179,15 @@
           <el-input v-model="editForm.password"></el-input>
         </el-form-item>
         <el-form-item label="用户角色" prop="role">
-          <el-input v-model="editForm.role"></el-input>
+          <el-select v-model="editForm.role" placeholder="请选择">
+            <el-option
+              v-for="item in roleList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <!-- 底部按钮区 -->
@@ -199,6 +226,7 @@ export default {
       addForm: {
         username: '',
         password: '',
+        state: '',
         email: '',
         role: '',
       },
@@ -271,15 +299,40 @@ export default {
           },
         ],
       },
+      // 删除的id
+      id: '',
+      // 下拉框
+      roleList: [
+        {
+          value: 'normal',
+          label: '普通用户',
+        },
+        {
+          value: 'admin',
+          label: '管理员',
+        },
+      ],
+      stateList: [
+        {
+          value: true,
+          label: '启用',
+        },
+        {
+          value: false,
+          label: '未启用',
+        },
+      ],
+      roleValue: '',
     }
   },
   created() {
     this.getUserList()
   },
   methods: {
+    // 获取用户列表
     getUserList() {
       this.$http({
-        url: '/user/getUserList',
+        url: '/api/user/getUserList',
         // method: 'get',
         params: this.queryInfo,
       }).then((res) => {
@@ -304,23 +357,69 @@ export default {
       console.log(userInfo)
     },
     // 用户修改
-    showEditDialog(id){
+    showEditDialog(id) {
       this.editDialogVisible = true
+      this.$http({ url: '/api/user/getUser', params: { id: id } }).then(
+        (res) => {
+          this.editForm = res.data.user
+        }
+      )
     },
     // 关闭修改框
     editDialogClosed() {
       this.$refs.editFormRef.clearValidate()
     },
     // 点击确定 修改用户信息
-    editUserInfo(){},
+    editUserInfo() {
+      this.$http({
+        url: '/api/user/updateUser',
+        method: 'post',
+        data: this.editForm,
+      }).then((res) => {
+        console.log(res)
+        if(res.meta.status===201){
+          this.editDialogVisible =false
+          this.getUserList()
+        }
+      })
+    },
     // 点击确定按钮添加用户
-    addUser(){},
-     // 监听 添加用户对话框关闭事件
+    addUser() {
+      this.$http({
+        url: '/api/user/addUser',
+        method: 'post',
+        data: this.addForm,
+      }).then((res) => {
+        console.log(res)
+        ;(this.addDialogVisible = false), this.getUserList()
+      })
+    },
+    // 监听 添加用户对话框关闭事件
     addDialogClosed() {
       this.$refs.addFormRef.resetFields()
     },
-
-
+    // 删除用户
+    removeUserByID(id) {
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true,
+      })
+        .then(() => {
+          this.$http({
+            url: '/api/user/deleteUser',
+            method: 'post',
+            data: { id: id },
+          }).then((res) => {
+            console.log(res)
+            this.getUserList()
+          })
+        })
+        .catch(() => {
+          this.$message.info('已取消删除')
+        })
+    },
   },
 }
 </script>
