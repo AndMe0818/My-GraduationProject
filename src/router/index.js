@@ -8,8 +8,9 @@ import Login from '../views/login/Login.vue'
 import Ground from '../views/ground/Ground.vue'
 import Users from '../views/users/Users.vue'
 import Notice from '../views/notice/Notice.vue'
-import Date from '../views/date/Date.vue'
-import Shop from '../views/shop/Shop.vue'
+import Check from '../views/check/Check.vue'
+import Welcome from '../views/home/Welcome.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -24,27 +25,13 @@ const routes = [
   {
     path: '/home',
     component: Home,
+    redirect:'/welcome',
     children: [
-      {
-        path: '/ground',
-        component: Ground
-      },
-      {
-        path: '/users',
-        component: Users
-      },
-      {
-        path: '/notice',
-        component: Notice
-      },
-      {
-        path: '/date',
-        component: Date
-      },
-      {
-        path: '/shop',
-        component: Shop
-      }
+      { path: '/welcome', component: Welcome },
+      { path: '/ground', component: Ground },
+      { path: '/users', component: Users },
+      { path: '/notice', component: Notice },
+      { path: '/check', component: Check }
     ]
   }
 ]
@@ -62,7 +49,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') return next()
   // 如果不是 login
   const user = window.sessionStorage.getItem('user')
-  console.log(user);
+  console.log(user)
   if (user) return next()
   next('/login')
 })

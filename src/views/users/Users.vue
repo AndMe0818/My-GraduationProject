@@ -37,12 +37,12 @@
       <el-table stripe border :data="userInfo" style="width: 100%">
         <el-table-column prop="username" label="用户名" width="180" />
         <el-table-column prop="email" label="用户邮箱" width="260" />
-        <el-table-column prop="role" label="用户角色" width="160">
+        <el-table-column prop="role" label="用户角色" >
           <template v-slot="scoped">
             {{ scoped.row.role == 'admin' ? '管理员' : '普通用户' }}
           </template>
         </el-table-column>
-        <el-table-column prop="state" label="用户状态" width="180">
+        <el-table-column prop="state" label="用户状态" >
           <template v-slot="scoped">
             <el-switch
               v-model="scoped.row.state"
@@ -54,7 +54,11 @@
           </template>
         </el-table-column>
         <!-- 用户操作栏 -->
-        <el-table-column prop="address" label="操作">
+        <el-table-column
+          prop="address"
+          label="操作"
+          v-if="roleShow === 'admin' ? true : false"
+        >
           <template v-slot="slotscope">
             <!-- 修改 -->
             <el-tooltip
@@ -95,7 +99,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="queryInfo.pagenum"
-          :page-sizes="[2, 10, 15, 20]"
+          :page-sizes="[5, 10, 15, 20]"
           :page-size="queryInfo.pagesize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
@@ -220,7 +224,7 @@ export default {
         // 当前页数
         pagenum: 1,
         // 每页数据个数
-        pagesize: 2,
+        pagesize: 5,
       },
       // 添加用户 表单
       addForm: {
@@ -323,9 +327,11 @@ export default {
         },
       ],
       roleValue: '',
+      roleShow: '',
     }
   },
   created() {
+    this.roleShow = window.sessionStorage.getItem('role')
     this.getUserList()
   },
   methods: {
@@ -377,8 +383,8 @@ export default {
         data: this.editForm,
       }).then((res) => {
         console.log(res)
-        if(res.meta.status===201){
-          this.editDialogVisible =false
+        if (res.meta.status === 201) {
+          this.editDialogVisible = false
           this.getUserList()
         }
       })

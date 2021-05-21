@@ -4,15 +4,15 @@
     <el-header>
       <div class="header-info">
         <img src="../../assets/img/ball11.png" alt="" />
-        <span> 热血体育馆场地管理系统 </span>
+        <span>热血体育馆场地预约登记系统 </span>
       </div>
       <!-- 头部用户区域 -->
       <el-dropdown>
         <el-button type="primary">
-          用户名称12<i class="el-icon-arrow-down el-icon--right"></i>
+          {{ uname }}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>退出登录</el-dropdown-item>
+          <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <!-- <el-button class="logout">退出</el-button> -->
@@ -37,31 +37,27 @@
           active-text-color="#ffd04b"
           :collapse-transition="false"
         >
-      
           <el-menu-item index="notice">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-warning"></i>
             <span slot="title">管内公告</span>
           </el-menu-item>
           <el-menu-item index="ground">
             <i class="el-icon-menu"></i>
             <span slot="title">场地信息</span>
           </el-menu-item>
-          <el-menu-item index="shop">
-            <i class="el-icon-menu"></i>
-            <span slot="title">场内商品</span>
-          </el-menu-item>
           <el-menu-item index="users">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-user-solid"></i>
             <span slot="title">用户管理</span>
           </el-menu-item>
-          <el-menu-item index="date">
-            <i class="el-icon-menu"></i>
-            <span slot="title">工作日志</span>
+          <el-menu-item index="check">
+            <i class="el-icon-message-solid"></i>
+            <span slot="title">预约情况</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
 
       <el-main>
+        
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -79,22 +75,23 @@ export default {
         { index: 'ground', title: '场地信息' },
         { index: 'shop', title: '场内商品' },
         { index: 'users', title: '用户管理' },
-        { index: 'date', title: '工作日志' },
+        { index: 'check', title: '预约情况' },
       ],
+      uname: '',
     }
   },
   created() {
     // this.getUserList()
+    this.uname = window.sessionStorage.getItem('uname')
   },
   methods: {
-    // getUserList() {
-    //   this.$http({ url: 'api/get/users' }).then((res) => {
-    //     console.log(res)
-    //   })
-    // },
-
     toogleCollapse() {
       this.isToggle = !this.isToggle
+    },
+    // 退出
+    logout() {
+      window.sessionStorage.clear()
+      this.$router.push('/login')
     },
   },
 }

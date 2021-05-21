@@ -43,6 +43,9 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownItem,
+    DatePicker,
+    Carousel,
+    CarouselItem,
 } from 'element-ui'
 
 Vue.use(Form)
@@ -86,5 +89,8 @@ Vue.use(Calendar);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
+Vue.use(DatePicker)
+Vue.use(Carousel);
+Vue.use(CarouselItem);
 // Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

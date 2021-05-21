@@ -96,7 +96,12 @@ export default {
           // 1.1 项目中除了登录意外的其他api接口 都必须在登录之后才能访问
           // 1.2 token 只又在当前网站打开期间才生效，所以才储存在 sessionstorage中
           // 2.通过路由拦截完成
-          window.sessionStorage.setItem('user', res.data.user)
+          let user = JSON.stringify(res.data.user)
+          window.sessionStorage.setItem('user', user)
+          window.sessionStorage.setItem('_id', res.data.user._id)
+          window.sessionStorage.setItem('role', res.data.user.role)
+          window.sessionStorage.setItem('uname', res.data.user.username)
+          this.$store.commit('setUser', res.data.user)
           // window.sessionStorage.setItem('Id', res.data.id)
           this.$router.push('/home')
         })

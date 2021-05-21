@@ -1,34 +1,8 @@
 <template>
-  <div class="corse-list">
-    <div class="item-box" v-for="(item, index) in CourseList" :key="index">
-      <!-- 这里 采用 绑定 class来给个函数判断 然后给出 样式名-->
-      <!-- 封面 -->
-      <div class="cover" :class="courseCover(item.type)">
-        <span class="iconfont" :class="courseIcon(item.type)"></span>
-        <span class="cover-title" :class="courseTitle(item.type)">{{
-          item.type | coverFilter
-        }}</span>
-      </div>
-      <div class="title">{{ item.name }}</div>
-      <!-- 多半要用 过滤器 -->
-      <div class="type">{{ item.type }}</div>
-    </div>
+  <div class="">
+    <div>标题标题标题</div>
+    <div>内容内容内容</div>
 
-    <!-- <div class="item-box">
-      <div class="cover"></div>
-      <div class="title"></div>
-      <div class="type"></div>
-    </div>
-    <div class="item-box">
-      <div class="cover"></div>
-      <div class="title"></div>
-      <div class="type"></div>
-    </div>
-    <div class="item-box">
-      <div class="cover"></div>
-      <div class="title"></div>
-      <div class="type"></div>
-    </div> -->
   </div>
 </template>
 
